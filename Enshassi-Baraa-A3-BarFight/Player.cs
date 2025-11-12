@@ -2,8 +2,8 @@
 
 public class Player
 {
-	public void Update()
-	{
+    public void Update()
+    {
 
-	}
+    }
 }

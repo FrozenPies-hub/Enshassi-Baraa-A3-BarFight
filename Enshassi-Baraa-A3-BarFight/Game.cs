@@ -1,22 +1,21 @@
-﻿// Include the namespaces (code libraries) you need below.
-using Raylib_cs;
+﻿using Raylib_cs;
 using System;
 using System.Numerics;
 
-// The namespace your code is in.
 namespace MohawkGame2D
 {
-    /// <summary>
-    ///     Your game code goes inside this class!
-    /// </summary>
     public class Game
     {
-        // Place your variables here:
-        HP opponenthp = new HP(new Vector2(400,300), 20, false);
-        HP playerhp = new HP(new Vector2(400, 100), 20, false);
-        /// <summary>
-        ///     Setup runs once before the game loop begins.
-        /// </summary>
+        HP opponenthp = new HP(new Vector2(400, 100), 20, false);
+        HP playerhp = new HP(new Vector2(400, 300), 20, false);
+
+        float attackWait = 0;
+        float attack = 3;
+
+        Opponent opponent = new Opponent();
+
+        Texture2D backgroundTexture;
+
         public void Setup()
         {
             Window.SetSize(800, 600);
@@ -24,15 +23,34 @@ namespace MohawkGame2D
 
         }
 
-        /// <summary>
-        ///     Update runs every frame.
-        /// </summary>
         public void Update()
         {
-            Window.ClearBackground(Graphics.LoadTexture(Bar_Fight_Background.webp));
+            Window.ClearBackground(Color.White);
+
+            backgroundTexture = Graphics.LoadTexture("texture/Bar-Fight-Background.jpg");
+
             opponenthp.Update();
+            opponent.Update();
             playerhp.Update();
+
+            Attack();
+        }
+
+        void Attack()
+        {
+            attackWait += Time.DeltaTime;
+
+            if (attackWait >= attack)
+            {
+                attackWait = 0;
+                System.Random random = new System.Random();
+                int attackChance = random.Next(1, 3);
+
+                if (attackChance == 1)
+                {
+                    playerhp.currentHP -= 1;
+                }
+            }
         }
     }
-
 }
