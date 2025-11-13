@@ -6,11 +6,12 @@ namespace MohawkGame2D
 {
     public class Game
     {
-        HP opponenthp = new HP(new Vector2(400, 100), 20, false);
-        HP playerhp = new HP(new Vector2(400, 300), 20, false);
+        HP opponenthp = new HP(new Vector2(690, 10), 20, false);
+        HP playerhp = new HP(new Vector2(690, 570), 20, false);
+        Player player = new Player();
 
         float attackWait = 0;
-        float attack = 3;
+        float attack = 5;
 
         Opponent opponent = new Opponent();
 
@@ -32,6 +33,7 @@ namespace MohawkGame2D
             opponenthp.Update();
             opponent.Update();
             playerhp.Update();
+            player.Update();
 
             Attack();
         }
