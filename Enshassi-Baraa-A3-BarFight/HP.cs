@@ -9,9 +9,6 @@ namespace MohawkGame2D
     {
         Vector2 position;
         Vector2 size = new Vector2(100, 20);
-        Vector2 hitBoxPos = new Vector2(0, 0);
-        Vector2 hitBoxSize = new Vector2(100, 100);
-        Vector2 mousePosition = Input.GetMousePosition();
 
         public int currentHP = 20;
         int fakeHP;
@@ -32,14 +29,14 @@ namespace MohawkGame2D
             CharacterHP();
         }
 
-        public void CharacterHP()
+        void CharacterHP()
         {
-            Draw.FillColor = MohawkGame2D.Color.Gray;
+            Draw.FillColor = Color.Gray;
             Draw.LineSize = 1;
-            Draw.LineColor = MohawkGame2D.Color.Black;
+            Draw.LineColor = Color.Black;
             Draw.Rectangle(position, size);
 
-            Draw.FillColor = MohawkGame2D.Color.Green;
+            Draw.FillColor = Color.Green;
             Draw.LineSize = 0;
             Draw.Rectangle(position.X, position.Y, fakeHP, size.Y);
         }
