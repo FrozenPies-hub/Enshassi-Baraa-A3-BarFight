@@ -11,11 +11,16 @@ namespace MohawkGame2D
         float attackDuration = 1;
         float attacking = 1;
 
-        float blockDuration = 1;
+        float blockDuration = 2;
         float blocking = 1;
 
-        public bool isBlocking;
-        public bool isAttacking;
+        public bool isBlocking = false;
+        public bool isAttacking = false;
+
+        Texture2D playerDefault = Graphics.LoadTexture("texture/player-default.jpg");
+        Texture2D playerAttack = Graphics.LoadTexture("texture/player-attack.jpg");
+        Texture2D playerBlock = Graphics.LoadTexture("texture/player-block.jpg");
+
 
         public void Update()
         {
@@ -41,15 +46,17 @@ namespace MohawkGame2D
             if (blocking < blockDuration && blocking > 0)
             {
                 isBlocking = true;
-                Draw.Rectangle(position + new Vector2(25, -25), size - new Vector2(25, 25)); // block stance
+                Graphics.Draw(playerBlock, position); // block stance
             }
             else if (attacking < attackDuration && attacking > 0)
             {
-                Draw.Rectangle(position - new Vector2(25, 25), size - new Vector2(25, 25)); // attacking stance
+                isBlocking = false;
+                Graphics.Draw(playerAttack, position); // attacking stance
             }
             else
             {
-                Draw.Rectangle(position, size); // defualt stance
+                isBlocking = false;
+                Graphics.Draw(playerDefault, position); // defualt stance
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Raylib_cs;
 using System;
 using System.Numerics;
-using System.Text;
 
 namespace MohawkGame2D
 {
@@ -12,15 +11,10 @@ namespace MohawkGame2D
         Player player = new Player();
         Ending ending = new Ending();
 
-        float attackWait = 0;
-        float attack = 5;
 
         Opponent opponent = new Opponent();
 
-        bool isLose;
-        bool isWin;
-
-        Texture2D backgroundTexture;
+        Texture2D backgroundTexture = Graphics.LoadTexture("texture/Bar-Fight-Background.jpg");
 
         public void Setup()
         {
@@ -33,6 +27,12 @@ namespace MohawkGame2D
         {
             Window.ClearBackground(Color.White);
 
+
+            if (Input.IsKeyboardKeyPressed(KeyboardInput.Enter))
+            {
+                ending.endingScreen = 4;
+            }
+
             if (opponenthp.currentHP == 0)
             {
                 ending.endingScreen = 1;
@@ -42,13 +42,13 @@ namespace MohawkGame2D
                 ending.endingScreen = 2;
             }
 
-            if (ending.endingScreen > 0)
+            if (ending.endingScreen < 4)
             {
                 ending.Update();
                 return;
             }
 
-            backgroundTexture = Graphics.LoadTexture("texture/Bar-Fight-Background.jpg");
+            Graphics.Draw(backgroundTexture, 30, 80);
 
             opponenthp.Update();
             opponent.Update();
@@ -57,14 +57,17 @@ namespace MohawkGame2D
 
             if (opponent.isHit == true && opponent.isBlocking == false)
             {
-                opponent.isHit = false;
                 opponenthp.currentHP -= 1;
+                opponent.isHit = false;
             }
 
             if (opponent.isAttacking == true && player.isBlocking == false)
             {
-                playerhp.currentHP -= 1;
-                opponent.isAttacking = false;
+                if (opponent.damageDealt == false)
+                {
+                    playerhp.currentHP -= 1;
+                    opponent.damageDealt = true;
+                }
             }
         }
     }

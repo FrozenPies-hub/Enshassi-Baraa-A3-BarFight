@@ -1,6 +1,7 @@
 ﻿using MohawkGame2D;
 using System;
 using System.Numerics;
+using Raylib_cs;
 
 namespace MohawkGame2D
 {
@@ -19,12 +20,19 @@ namespace MohawkGame2D
         float attackLength = 1;
         float attackLengthTime = 0;
 
+        Texture2D enemyBlock = Graphics.LoadTexture("texture/enemy-block.jpg");
+        Texture2D enemyDefault = Graphics.LoadTexture("texture/enemy-default.jpg");
+        Texture2D enemyHurt = Graphics.LoadTexture("texture/enemy-hurt.jpg");
+        Texture2D enemyAttack = Graphics.LoadTexture("texture/enemy-attack.jpg");
 
         int blockChance;
 
-        public bool isBlocking;
-        public bool isHit;
-        public bool isAttacking;
+        public bool isBlocking = false;
+        public bool isHit = false;
+        public bool isAttacking = false;
+
+        public bool damageDealt = false;
+        public bool damageTaken = false;
 
         public void Update()
         {
@@ -46,41 +54,49 @@ namespace MohawkGame2D
                 collides = true;
             }
 
-
-
             if (Input.IsMouseButtonPressed(MouseInput.Left) && collides && attacked >= 1)
             {
                 System.Random random = new System.Random();
                 blockChance = random.Next(1, 6);
-                Console.WriteLine(blockChance);
                 attacked = 0;
             }
 
             if (blockChance == 5 && attacked < hurt && attacked > 0)
             {
                 isBlocking = true;
-                Draw.Rectangle(position - new Vector2(25, 25), size - new Vector2(25, 25)); // blocking stance
-            }
-            else if (blockChance < 5 && attacked < hurt && attacked > 0)
-            {
-                isHit = true;
-                Draw.Rectangle(position + new Vector2(25, 25), size - new Vector2(25, 25)); // took damage stance
+                Graphics.Draw(enemyBlock, position); // blocking stance
             }
             else if (attack >= attackWait)
             {
+                isBlocking = false;
                 isAttacking = true;
-                Draw.Rectangle(position + new Vector2(50, 50), size); // attacking stance
-                attackLengthTime = Time.DeltaTime;
+                Graphics.Draw(enemyAttack, position); // attacking stance
+                attackLengthTime += Time.DeltaTime;
                 if (attackLengthTime >= attackLength)
                 {
+                    damageDealt = false;
+                    isAttacking = false;
                     attackLengthTime = 0;
                     attack = 0;
 
                 }
             }
+            else if (blockChance < 5 && attacked < hurt && attacked > 0)
+            {
+                isBlocking = false;
+                if (damageTaken == false)
+                {
+                    isHit = true;
+                    damageTaken = true;
+                }
+
+                Graphics.Draw(enemyHurt, position); // took damage stance
+            }
             else
             {
-                Draw.Rectangle(position, size); // defualt stance
+                isBlocking = false;
+                damageTaken = false;
+                Graphics.Draw(enemyDefault, position); // defualt stance
             }
 
         }
